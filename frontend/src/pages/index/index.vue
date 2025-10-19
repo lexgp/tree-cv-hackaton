@@ -48,8 +48,11 @@ watch(() => pageNumber.value, () => loadData())
       </VCol>
 
       <VCol cols="12">
-        <VBtn class="ma-auto" block color="primary" rounded="xl" to="/checkup/new">
+        <VBtn class="ma-auto mb-2" block color="primary" rounded="xl" to="/checkup/new">
           Создать обследование
+        </VBtn>
+        <VBtn class="ma-auto mb-2" block color="success" rounded="xl" to="/areas">
+          Мои участки и отчёты
         </VBtn>
       </VCol>
 

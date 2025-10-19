@@ -22,7 +22,7 @@
     <!-- Информация снизу -->
     <v-card-text>
       <template v-if="annotation.is_tree_finded">
-        <h3 class="text-h5 font-weight-bold mb-2">
+        <h3 class="text-h5 text-capitalize font-weight-bold mb-2">
           {{ annotation.breed }}
         </h3>
 

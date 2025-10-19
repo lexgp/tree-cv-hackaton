@@ -18,7 +18,7 @@ class LLMProvider():
         self.provider_url = provider_url
         self.provider_submodel = provider_submodel
 
-    def predict(self, prompt: str, image: Image.Image = None):
+    def predict(self, prompt: str, image: Image.Image = None, submodel: str = None):
         client = OpenAI(
             api_key=self.provider_secret_key,
             base_url=self.provider_url,
@@ -50,7 +50,7 @@ class LLMProvider():
         # print(llm_request)
         photo_result = client.chat.completions.create(
             messages=[llm_request],
-            model=self.provider_submodel,
+            model=submodel if submodel else self.provider_submodel,
             max_tokens=LLMProvider.MAX_TOKENS,
             temperature=0,
         )
@@ -62,8 +62,8 @@ class LLMProvider():
             response_message = photo_result.choices[0].message.content
             print('response_message', response_message)
             results = LLMProvider.extract_json_from_llm_output(response_message)
-            if not isinstance(results, list):
-                raise ValueError("Ожидался массив результатов")
+            if not isinstance(results, dict):
+                raise ValueError("Ожидался словарь результатов")
         except Exception as e:
             print(f"Ошибка при выполнении запроса к GPT: {e}")
 

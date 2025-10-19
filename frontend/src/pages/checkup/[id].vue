@@ -46,11 +46,22 @@ onMounted(() => loadData())
 
 <template>
   <v-container class="pa-4" style="max-width: 480px">
-    <!-- Заголовок участка -->
-    <h2 class="text-h4 font-weight-bold mb-4">
-      <IconBtn icon="ri-arrow-left-line" class="mr-1" to="/" />
-      Участок: {{ checkupData?.area_detail?.title }}
-    </h2>
+    <div class="mb-4">
+      <div class="d-flex">
+        <RouterLink to="/" style="margin-left: -10px;">
+          <IconBtn icon="ri-arrow-left-line" />
+          К списку обследований
+        </RouterLink>
+      </div>
+
+      <h2 class="text-h4 mb-1">
+        Участок: {{ checkupData?.area_detail?.title }}
+      </h2>
+      <em>Дата: {{ checkupData?.report_date }}</em>
+    </div>
+
+    <!-- {{ checkupData.condition_statistic }} -->
+    <VProgressLinear v-if="isLoading" top indeterminate />
 
     <template v-if="checkupData">
       <UploadPhotosView v-if="checkupData.status == 'pending'" v-model:checkup-data="checkupData" />

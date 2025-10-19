@@ -15,6 +15,7 @@ declare module 'vue' {
     CategoryManySelectField: typeof import('./src/components/fields/CategoryManySelectField.vue')['default']
     CategorySingleSelectField: typeof import('./src/components/fields/CategorySingleSelectField.vue')['default']
     CompactDatePicker: typeof import('./src/components/common/CompactDatePicker.vue')['default']
+    ConditionStatistic: typeof import('./src/components/areas/ConditionStatistic.vue')['default']
     ErrorHeader: typeof import('./src/components/ErrorHeader.vue')['default']
     MoreBtn: typeof import('./src/@core/components/MoreBtn.vue')['default']
     NumberField: typeof import('./src/components/fields/NumberField.vue')['default']
@@ -25,5 +26,7 @@ declare module 'vue' {
     ThemeSwitcher: typeof import('./src/@core/components/ThemeSwitcher.vue')['default']
     UploadPhotoAWS: typeof import('./src/components/common/UploadPhotoAWS.vue')['default']
     UploadPhotosMany: typeof import('./src/components/common/UploadPhotosMany.vue')['default']
+    YandexMap: typeof import('./src/components/common/YandexMap.vue')['default']
+    YandexMapTrees: typeof import('./src/components/common/YandexMapTrees.vue')['default']
   }
 }

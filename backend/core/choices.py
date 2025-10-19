@@ -23,6 +23,14 @@ class Breed(models.TextChoices):
     ELM = "elm", "Вяз"
     MAPLE = "maple", "Клён"
     SPRUCE = "spruce", "Ель"
+    CATALPA = "catalpa", "Катальпа"
+    WILLOW = "willow", "Ива"
+    LINDEN = "linden", "Липа"
+    ACACIA = "acacia", "Акация"
+    ASPEN = "aspen", "Осина"
+    CHESTNUT = "chestnut", "Каштан"
+    APPLE = "apple", "Яблоня"
+    CHERRY = "cherry", "Вишня"
     # ель
     # катальпа
     # ива
@@ -70,6 +78,14 @@ RUS_TO_ENUM = {
     "клён": Breed.MAPLE,
     "ель": Breed.SPRUCE,
     "не определено": Breed.UNKNOWN,
+    "катальпа": Breed.CATALPA,
+    "ива": Breed.WILLOW,
+    "липа": Breed.LINDEN,
+    "акация": Breed.ACACIA,
+    "осина": Breed.ASPEN,
+    "каштан": Breed.CHESTNUT,
+    "яблоня": Breed.APPLE,
+    "вишня": Breed.CHERRY,
 
     "нормальное": Condition.NORMAL,
     "заваливающееся": Condition.FALLING,

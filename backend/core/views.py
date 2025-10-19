@@ -30,9 +30,11 @@ from rest_framework.status import (
 from .models import Checkup, CheckupPhoto, CheckupPhotoAnnotation, DistrictArea
 from .serializers import (
     CheckupSerializer,
+    CheckupDetailSerializer,
     CheckupPhotoSerializer,
     CheckupPrototypeSerializer,
     DistrictAreaSerializer,
+    DistrictAreaDetailSerializer,
 )
 
 from core.choices import ObjectType, Breed, Condition, Season, Artifact, CheckupStatus, RUS_TO_ENUM
@@ -46,8 +48,13 @@ from core.utils.annotator import annotate_photo
 
 class CheckupViewSet(ModelViewSet):
     queryset = Checkup.objects.all().order_by("-id")
-    serializer_class = CheckupSerializer
     pagination_class = StandardResultsSetPagination
+
+    def get_serializer_class(self):
+        if self.action == 'retrieve':
+            return CheckupDetailSerializer
+        return CheckupSerializer
+
 
     @action(detail=False, methods=["get"])
     def prototype(self, request):
@@ -90,7 +97,7 @@ class CheckupViewSet(ModelViewSet):
             # ???: может не стоит добавлять паддинги при ресайзе? Наверное всё таки стоит, йола лучше отрабатывает при стандартизации. Вроде бы.
             resized_image = image_utils.resize_to_square(image, IMAGE_SIZE)
 
-            angle = provider.predict(PromptOptions.PHOTO_ANGLE.value, resized_image)
+            angle = provider.predict(PromptOptions.PHOTO_ANGLE.value, resized_image, submodel='llama-4-maverick')
             if angle and isinstance(angle['angle'], int) and angle['angle']:
                 resized_image = image_utils.rotate_image_90(resized_image, 360 - angle['angle'])
             
@@ -102,14 +109,23 @@ class CheckupViewSet(ModelViewSet):
                 primary_bbox = yolo_service.select_primary_object(bboxes, resized_image.size)
                 if primary_bbox:
                     cropped_img = yolo_service.crop_with_padding(resized_image, primary_bbox, padding_ratio=0.1)
-                    tree = provider.predict(PromptOptions.MAIN.value, cropped_img)
+                    tree = provider.predict(PromptOptions.MAIN.value, cropped_img, submodel='llama-4-maverick')
 
             if not hasattr(photo, 'annotation'):
                 photo.annotation = CheckupPhotoAnnotation.objects.create(photo=photo)
             
             if tree:
+                llm_models = ['llama-4-maverick', 'gemini-2.5-flash', 'llama-4-scout']
+                for llm_model in llm_models:
+                    breed_data = provider.predict(PromptOptions.GET_BREED.value, cropped_img, submodel=llm_model)
+                    print('breed_data', breed_data, llm_model)
+                    breed = 'не определено'
+                    if breed_data and breed_data['breed'] and breed_data['breed']!='не определено':
+                        breed = breed_data['breed']
+                        break
+
                 photo.annotation.object_type = RUS_TO_ENUM[tree["type"]]
-                photo.annotation.breed = RUS_TO_ENUM.get(tree["breed"], Breed.UNKNOWN)
+                photo.annotation.breed = RUS_TO_ENUM.get(breed, Breed.UNKNOWN)
                 photo.annotation.condition = RUS_TO_ENUM[tree["condition"]]
                 photo.annotation.is_dry = tree["is_dry"]
                 photo.annotation.percentage_dried = tree["percentage_dried"]
@@ -185,3 +201,8 @@ class CheckupPhotoViewSet(ModelViewSet):
 class DistrictAreaViewSet(viewsets.ModelViewSet):
     queryset = DistrictArea.objects.all()
     serializer_class = DistrictAreaSerializer
+
+    def get_serializer_class(self):
+        if self.action == 'retrieve':
+            return DistrictAreaDetailSerializer
+        return DistrictAreaSerializer

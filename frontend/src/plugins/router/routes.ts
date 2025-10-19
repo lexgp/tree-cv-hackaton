@@ -9,6 +9,10 @@ export const routes = [
         component: () => import('@/pages/index/index.vue'),
       },
       {
+        path: 'home',
+        component: () => import('@/pages/index/index.vue'),
+      },
+      {
         path: 'checkup/new',
         component: () => import('@/pages/checkup/new.vue'),
       },
@@ -24,6 +28,16 @@ export const routes = [
         path: 'checkup/:id',
         component: () => import('@/pages/checkup/[id].vue'),
       },
+
+      {
+        path: 'areas',
+        component: () => import('@/pages/areas/index.vue'),
+      },
+      {
+        path: 'areas/:id',
+        component: () => import('@/pages/areas/[id].vue'),
+      },
+
 
     ]
   },
