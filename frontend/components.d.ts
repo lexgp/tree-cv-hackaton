@@ -26,7 +26,6 @@ declare module 'vue' {
     ThemeSwitcher: typeof import('./src/@core/components/ThemeSwitcher.vue')['default']
     UploadPhotoAWS: typeof import('./src/components/common/UploadPhotoAWS.vue')['default']
     UploadPhotosMany: typeof import('./src/components/common/UploadPhotosMany.vue')['default']
-    YandexMap: typeof import('./src/components/common/YandexMap.vue')['default']
     YandexMapTrees: typeof import('./src/components/common/YandexMapTrees.vue')['default']
   }
 }
